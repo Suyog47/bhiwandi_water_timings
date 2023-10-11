@@ -1,6 +1,8 @@
 import 'package:bhiwandi_water_timings/constants/colors.dart';
 import 'package:bhiwandi_water_timings/controllers/data_controller.dart';
 import 'package:bhiwandi_water_timings/screens/dashboard.dart';
+import 'package:bhiwandi_water_timings/utils/shared_preference_data.dart';
+import 'package:bhiwandi_water_timings/utils/snackbars.dart';
 import 'package:bhiwandi_water_timings/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,25 +24,24 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future getAllData() async {
-   await _dataController.getAllData();
-   if(_dataController.response == 'success'){
-     Future.delayed(const Duration(seconds: 1), () {
-       Navigator.pushReplacement(
-         context,
-         MaterialPageRoute(
+    _dataController.selectedArea = await SharedPreferenceData().getData();
+    await _dataController.getAllData();
+    if (_dataController.response == 'success') {
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
 
-           builder: (context) => const Dashboard(),
-         ),
-       );
-     });
-   }
-   else{
-     ScaffoldMessenger.of(context).showSnackBar(
-       const SnackBar(
-         content: Text('Oops...something went wrong, please try again later'),
-       ),
-     );
-   }
+            builder: (context) => const Dashboard(),
+          ),
+        );
+      });
+    }
+    else {
+      CustomSnackBar().alert(
+          "Oops...something went wrong, Load the app again", context,
+          color: redColor);
+    }
   }
 
   @override

@@ -9,6 +9,7 @@ class DataController {
   final areas = List.empty(growable: true);
   final timings = List.empty(growable: true);
   RxString news = "".obs;
+  dynamic selectedArea;
 
   Future getData(String id) async {
       try {
@@ -32,6 +33,7 @@ class DataController {
   }
 
   Future getAllData() async {
+    data.clear();
     try {
       load.value = 1;
       await DataApiCalls().getAllData().then((value) {
@@ -61,14 +63,14 @@ class DataController {
         areas.add(e["name"]);
       }
     }
-    getTimings(areas[0]);
+    getTimings(selectedArea ?? areas[0]);
   }
 
   void getTimings(String area) {
     timings.clear();
     for (var e in data) {
       if(e['name'] == area){
-        timings.add({'from': e['fromTime'], 'till': e['tillTime']});
+        timings.add({'id': e['timingId'], 'from': e['fromTime'], 'till': e['tillTime']});
       }
     }
     getNews(area);
