@@ -26,18 +26,17 @@ class _SplashScreenState extends State<SplashScreen> {
   Future getAllData() async {
     _dataController.selectedArea = await SharedPreferenceData().getData();
     await _dataController.getAllData();
+
     if (_dataController.response == 'success') {
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-
             builder: (context) => const Dashboard(),
           ),
         );
       });
-    }
-    else {
+    } else {
       CustomSnackBar().alert(
           "Oops...something went wrong, Load the app again", context,
           color: redColor);
