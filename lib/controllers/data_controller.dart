@@ -13,7 +13,6 @@ class DataController {
 
   Future getData(String id) async {
       try {
-        load.value = 1;
         await DataApiCalls().getData(id).then((value) {
           if (value != "error") {
             dynamic res = jsonDecode(value);
@@ -27,9 +26,7 @@ class DataController {
             response = "failure";
           }
         });
-      } finally {
-        load.value = 0;
-      }
+      } finally {}
   }
 
   Future getAllData() async {

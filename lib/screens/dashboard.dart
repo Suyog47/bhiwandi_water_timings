@@ -2,12 +2,12 @@ import 'package:bhiwandi_water_timings/constants/colors.dart';
 import 'package:bhiwandi_water_timings/constants/heights.dart';
 import 'package:bhiwandi_water_timings/controllers/data_controller.dart';
 import 'package:bhiwandi_water_timings/utils/shared_preference_data.dart';
+import 'package:bhiwandi_water_timings/utils/snackbars.dart';
 import 'package:bhiwandi_water_timings/widgets/loaders.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bhiwandi_water_timings/widgets/table_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -21,115 +21,16 @@ class _DashboardState extends State<Dashboard> {
       TextEditingController();
   late ValueNotifier<String> areaNotifier;
   final DataController _dataController = Get.find();
-  late List<TableRow> header = [];
   late List<TableRow> arr = [];
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
-    setTableHeader();
     setTiming(_dataController.timings);
-    areaNotifier = ValueNotifier(_dataController.selectedArea ?? _dataController.areas[0]);
+    areaNotifier =
+        ValueNotifier(_dataController.selectedArea ?? _dataController.areas[0]);
     super.initState();
-  }
-
-  void setTableHeader() {
-    header = [
-      const TableRow(
-          decoration: BoxDecoration(
-            color: amberColor,
-          ),
-          children: [
-            TableCell(
-                verticalAlignment: TableCellVerticalAlignment.middle,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Center(
-                    child: Text(
-                      "From",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ),
-                )),
-            TableCell(
-                verticalAlignment: TableCellVerticalAlignment.middle,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Center(
-                    child: Text(
-                      "Till",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ),
-                )),
-          ]),
-    ];
-  }
-
-  void setTiming(dynamic timing) {
-    if(timing[0]['id'] == null){
-      setState(() {
-        arr = [];
-      });
-    }
-    else {
-      setState(() {
-      timing.forEach((e) {
-        arr.add(
-          TableRow(
-              decoration: const BoxDecoration(
-                color: lightGreyColor,
-              ),
-              children: [
-                TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.middle,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Center(
-                        child: Text(
-                          e['from'],
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 18),
-                        ),
-                      ),
-                    )),
-                TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.middle,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Center(
-                        child: Text(
-                          e['till'],
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 18),
-                        ),
-                      ),
-                    )),
-              ]),
-        );
-      });
-    });
-    }
-  }
-
-  Future onRefresh() async {
-    _dataController.load.value = 1;
-    await _dataController.getAllData();
-    if(_dataController.response == 'success'){
-      arr.clear();
-      setTiming(_dataController.timings);
-    }
-    else{
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Oops...something went wrong, please try again later'),
-        ),
-      );
-    }
-    _dataController.load.value = 0;
-    _refreshController.refreshCompleted();
   }
 
   @override
@@ -152,9 +53,10 @@ class _DashboardState extends State<Dashboard> {
               enablePullDown: true,
               header: const WaterDropMaterialHeader(),
               controller: _refreshController,
-              onRefresh: onRefresh,
+              onRefresh: _onRefresh,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 12.0),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -171,7 +73,8 @@ class _DashboardState extends State<Dashboard> {
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey, width: 2)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 2)),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 5, vertical: 2),
                             child: ValueListenableBuilder<String>(
@@ -180,19 +83,8 @@ class _DashboardState extends State<Dashboard> {
                                   return DropdownButton<String>(
                                     value: area,
                                     borderRadius: BorderRadius.circular(10),
-                                    onChanged: (newValue) {
-                                      SharedPreferenceData().setData(newValue!);
-                                      _dataController.selectedArea = newValue;
-                                      areaNotifier.value = newValue;
-                                      _dataController.getTimings(newValue);
-                                      setState(() {
-                                        arr.clear();
-                                        if (_dataController.timings[0]['from'] !=
-                                            null) {
-                                          setTiming(_dataController.timings);
-                                        }
-                                      });
-                                    },
+                                    onChanged: (newValue) =>
+                                        _onChanged(newValue),
                                     items: _dataController.areas
                                         .map<DropdownMenuItem<String>>((value) {
                                       return DropdownMenuItem<String>(
@@ -218,7 +110,8 @@ class _DashboardState extends State<Dashboard> {
                                 const Text(
                                   "Estimated Timings set for this area",
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 18),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
                                 ),
                                 height10,
                                 height10,
@@ -226,7 +119,18 @@ class _DashboardState extends State<Dashboard> {
                                   border: TableBorder.all(color: blackColor),
                                   defaultVerticalAlignment:
                                       TableCellVerticalAlignment.middle,
-                                  children: header,
+                                  children: [
+                                    TableRow(
+                                        decoration: const BoxDecoration(
+                                          color: amberColor,
+                                        ),
+                                        children: [
+                                          CustomTableUI()
+                                              .headerTableCell(text: 'From'),
+                                          CustomTableUI()
+                                              .headerTableCell(text: 'Till'),
+                                        ]),
+                                  ],
                                 ),
                                 Table(
                                   border: TableBorder.all(color: blackColor),
@@ -256,11 +160,13 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           height10,
                           Obx(() {
-                            _newsTextController.text = _dataController.news.value;
+                            _newsTextController.text =
+                                _dataController.news.value;
                             return Container(
                               height: 140,
                               decoration: BoxDecoration(
-                                  border: Border.all(color: greyColor, width: 2.0),
+                                  border:
+                                      Border.all(color: greyColor, width: 2.0),
                                   borderRadius: BorderRadius.circular(5)),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -295,5 +201,49 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
+  }
+
+  void setTiming(dynamic timing) {
+    arr.clear();
+    if (timing[0]['id'] == null) {
+      setState(() {
+        arr = [];
+      });
+    } else {
+      setState(() {
+        timing.forEach((e) {
+          arr.add(
+            TableRow(
+                decoration: const BoxDecoration(
+                  color: lightGreyColor,
+                ),
+                children: [
+                  CustomTableUI().bodyTableCell(text: e['from']),
+                  CustomTableUI().bodyTableCell(text: e['till']),
+                ]),
+          );
+        });
+      });
+    }
+  }
+
+  Future _onRefresh() async {
+    await _dataController.getAllData();
+    if (_dataController.response == 'success') {
+      setTiming(_dataController.timings);
+    } else {
+      CustomSnackBar().alert(
+          "Oops...something went wrong, please try again later", context,
+          color: redColor);
+    }
+    _refreshController.refreshCompleted();
+  }
+
+  void _onChanged(area) {
+    SharedPreferenceData().setData(area!);
+    _dataController.selectedArea = area;
+    areaNotifier.value = area;
+    _dataController.getTimings(area);
+    setTiming(_dataController.timings);
   }
 }
