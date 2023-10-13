@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:bhiwandi_water_timings/api_calls/data_api.dart';
+import 'package:BWT/api_calls/data_api.dart';
 import 'package:get/get.dart';
 
 class DataController extends GetxController {

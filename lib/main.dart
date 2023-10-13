@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:bhiwandi_water_timings/screens/splash_screen.dart';
+import 'package:BWT/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class MyHttpOverrides extends HttpOverrides {

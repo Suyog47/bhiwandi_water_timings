@@ -1,7 +1,7 @@
-import 'package:bhiwandi_water_timings/constants/colors.dart';
-import 'package:bhiwandi_water_timings/constants/heights.dart';
-import 'package:bhiwandi_water_timings/constants/size_helpers.dart';
-import 'package:bhiwandi_water_timings/controllers/internet_controller.dart';
+import 'package:BWT/constants/colors.dart';
+import 'package:BWT/constants/heights.dart';
+import 'package:BWT/constants/size_helpers.dart';
+import 'package:BWT/controllers/internet_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
