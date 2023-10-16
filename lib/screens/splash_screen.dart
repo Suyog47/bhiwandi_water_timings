@@ -1,8 +1,8 @@
 import 'package:BWT/constants/colors.dart';
 import 'package:BWT/controllers/data_controller.dart';
 import 'package:BWT/controllers/internet_controller.dart';
-import 'package:BWT/screens/dashboard.dart';
 import 'package:BWT/screens/internet_connectivity_screen.dart';
+import 'package:BWT/utils/navigations.dart';
 import 'package:BWT/utils/shared_preference_data.dart';
 import 'package:BWT/utils/snackbars.dart';
 import 'package:BWT/widgets/loaders.dart';
@@ -34,12 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (_dataController.response == 'success') {
         Future.delayed(const Duration(seconds: 1), () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const Dashboard(),
-            ),
-          );
+          Navigate().toDashboard(context);
         });
       } else {
         CustomSnackBar().alert(
