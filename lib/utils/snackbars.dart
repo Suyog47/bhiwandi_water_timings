@@ -1,4 +1,5 @@
-import 'package:bhiwandi_water_timings/constants/colors.dart';
+
+import 'package:BWT/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomSnackBar {

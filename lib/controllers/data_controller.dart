@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:bhiwandi_water_timings/api_calls/data_api.dart';
+import 'package:BWT/api_calls/data_api.dart';
 import 'package:get/get.dart';
 
-class DataController {
+class DataController extends GetxController {
   RxInt load = 0.obs;
   String response = "";
   final data = List.empty(growable: true);

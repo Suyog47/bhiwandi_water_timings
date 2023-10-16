@@ -1,10 +1,11 @@
-import 'package:bhiwandi_water_timings/constants/colors.dart';
-import 'package:bhiwandi_water_timings/constants/heights.dart';
-import 'package:bhiwandi_water_timings/controllers/data_controller.dart';
-import 'package:bhiwandi_water_timings/utils/shared_preference_data.dart';
-import 'package:bhiwandi_water_timings/utils/snackbars.dart';
-import 'package:bhiwandi_water_timings/widgets/loaders.dart';
-import 'package:bhiwandi_water_timings/widgets/table_ui.dart';
+
+import 'package:BWT/constants/colors.dart';
+import 'package:BWT/constants/heights.dart';
+import 'package:BWT/controllers/data_controller.dart';
+import 'package:BWT/utils/shared_preference_data.dart';
+import 'package:BWT/utils/snackbars.dart';
+import 'package:BWT/widgets/loaders.dart';
+import 'package:BWT/widgets/table_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -140,13 +141,16 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ],
                             )
-                          : const Text(
-                              "Sorry, No timings are set for this area",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                          : const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 30.0),
+                              child: Text(
+                                "No timings are set for this area",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 17,
+                                    letterSpacing: 1.7),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                       height30,
                       height10,
