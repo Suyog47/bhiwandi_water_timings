@@ -1,21 +1,12 @@
-import 'package:BWT/screens/dashboard.dart';
-import 'package:BWT/screens/splash_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Navigate {
-  void toSplash(BuildContext context, [Map? data]) {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SplashScreen(),
-        ));
+
+  void toDashboard([Map? data]) {
+    Get.toNamed('/dashboard');
   }
 
-  void toDashboard(BuildContext context, [Map? data]) {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Dashboard(),
-        ));
+  void toFeedback([Map? data]) {
+    Get.toNamed('/feedback');
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "322145844936",
+    "project_id": "bwtlinking",
+    "storage_bucket": "bwtlinking.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322145844936:android:c84f33c66fb8061db62ffd",
+        "android_client_info": {
+          "package_name": "com.example.bhiwandi_water_timings"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwA44pEiOP8UUL_8yKVH0n7bSwE5Hf4ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

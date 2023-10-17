@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (_dataController.response == 'success') {
         Future.delayed(const Duration(seconds: 1), () {
-          Navigate().toDashboard(context);
+          Navigate().toDashboard({'text': 'gotcha'});
         });
       } else {
         CustomSnackBar().alert(
